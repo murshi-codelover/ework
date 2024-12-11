@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:newproject/constants/widgets/mydrawer.dart';
 import 'package:provider/provider.dart';
 
-import '../../constants/colors/themeprovider.dart';
-import '../bottomnavigation/abmpage.dart';
+import '../../../../constants/colors/themeprovider.dart';
 import '../bottomnavigation/bussinesspage.dart';
 import '../bottomnavigation/homepage.dart';
+import '../bottomnavigation/profile.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

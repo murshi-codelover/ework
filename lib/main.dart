@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:newproject/constants/colors/themeprovider.dart';
 import 'package:provider/provider.dart';
 
-import 'presentation/screens/spalshscreen.dart';
+import 'presentation/mobilescreens/userscreen/screens/spalshscreen.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(
