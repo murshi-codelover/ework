@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:newproject/constants/widgets/mytextfield.dart';
-import 'package:newproject/presentation/mobilescreens/userscreen/screens/register/registrationscreen.dart';
+
+import '../screens/register/registrationscreen.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -24,7 +25,7 @@ class HomePage extends StatelessWidget {
               child: MyTextField(
                 controller: searchController,
                 HintText: 'Search something...',
-                LabelText: Text('Search'),
+                LabelText: const Text('Search'),
                 ObscureText: false,
               ),
             ),
@@ -40,7 +41,8 @@ class HomePage extends StatelessWidget {
                   color: Colors.black45,
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                child: Center(child: Text('R E G I S T E R E D  W O R K')),
+                child:
+                    const Center(child: Text('R E G I S T E R E D  W O R K')),
               ),
             ),
           ),
@@ -50,34 +52,92 @@ class HomePage extends StatelessWidget {
             sliver: SliverGrid(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => RegistrationScreen(
-                                img: index == 0 ||
-                                        index == 3 ||
-                                        index == 4 ||
-                                        index == 7 ||
-                                        index == 8
-                                    ? 'assets/cardcover/juice.jpeg'
-                                    : 'assets/cardcover/catering.jpeg',
-                              )));
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(8.0),
-                          image: DecorationImage(
-                              image: AssetImage(
-                                index == 0 ||
-                                        index == 3 ||
-                                        index == 4 ||
-                                        index == 7 ||
-                                        index == 8
-                                    ? 'assets/cardcover/juice.jpeg'
-                                    : 'assets/cardcover/catering.jpeg',
-                              ),
-                              fit: BoxFit.fill)),
+                  return Material(
+                    elevation: 100,
+                    borderRadius: BorderRadius.circular(10),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => RegistrationScreen(
+                                  img: index == 0 ||
+                                          index == 3 ||
+                                          index == 4 ||
+                                          index == 7 ||
+                                          index == 8
+                                      ? 'assets/cardcover/juice.jpeg'
+                                      : 'assets/cardcover/catering.jpeg',
+                                )));
+                      },
+                      child: Container(
+                        // decoration: BoxDecoration(
+                        //     color: Colors.transparent,
+                        //     borderRadius: BorderRadius.circular(20)),
+                        //  child: GestureDetector(
+                        //
+                        child: Column(
+                          //crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                                width: double.infinity,
+                                height: 120,
+                                child: CircleAvatar(
+                                  child: Icon(
+                                    Icons.food_bank,
+                                    size: 50,
+                                  ),
+                                )),
+                            Text(
+                              'Golden Leaf',
+                              style: TextStyle(fontSize: 12),
+                            ),
+                            Text(
+                              'Catering work',
+                              style: TextStyle(fontSize: 12),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.calendar_month,
+                                  size: 12,
+                                ),
+                                Text(' 21-12-24',
+                                    style: TextStyle(fontSize: 12))
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.location_history,
+                                  size: 12,
+                                ),
+                                Text(
+                                  ' Thodupuzha',
+                                  style: TextStyle(fontSize: 12),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                        // child: Container(
+                        //   decoration: BoxDecoration(
+                        //       color: Colors.blue,
+                        //       borderRadius: BorderRadius.circular(8.0),
+                        //       image: DecorationImage(
+                        //           image: AssetImage(
+                        //             index == 0 ||
+                        //                     index == 3 ||
+                        //                     index == 4 ||
+                        //                     index == 7 ||
+                        //                     index == 8
+                        //                 ? 'assets/cardcover/juice.jpeg'
+                        //                 : 'assets/cardcover/catering.jpeg',
+                        //           ),
+                        //           fit: BoxFit.fill)),
+                        // ),
+                        //    ),
+                      ),
                     ),
                   );
                 },

@@ -3,9 +3,9 @@ import 'package:newproject/constants/widgets/mydrawer.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../constants/colors/themeprovider.dart';
-import '../bottomnavigation/bussinesspage.dart';
 import '../bottomnavigation/homepage.dart';
 import '../bottomnavigation/profile.dart';
+import '../bottomnavigation/works.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   final List<Widget> _pages = [
     const HomePage(),
-    const BussinessPage(),
+    const WorksPage(),
     const ABM(),
   ];
 
@@ -46,9 +46,9 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.work), label: 'Work'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.business), label: 'Bussiness'),
-          BottomNavigationBarItem(icon: Icon(Icons.group), label: 'ABM'),
+              icon: Icon(Icons.account_box), label: 'Profile'),
         ],
         currentIndex: _selectedIndex,
         onTap: onItemTapped,

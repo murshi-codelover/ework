@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:newproject/constants/colors/themeprovider.dart';
+import 'package:newproject/presentation/mobilescreens/userscreen/screens/homescreen.dart';
 import 'package:provider/provider.dart';
-
-import 'presentation/mobilescreens/userscreen/screens/spalshscreen.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(
@@ -18,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const SplashScreen(),
+      home: const HomeScreen(),
       theme: Provider.of<ThemeProvider>(context).themeData,
     );
   }
