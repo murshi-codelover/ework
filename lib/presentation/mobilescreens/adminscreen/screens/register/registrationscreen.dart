@@ -151,55 +151,55 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             ),
           ],
         ),
-        bottomNavigationBar: BottomAppBar(
-          //color: Colors.purple,
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: Material(
-                  elevation: 100,
-                  child: Container(
-                    width: 159,
-                    height: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.red,
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Save',
-                        style: TextStyle(fontSize: 20, color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Material(
-                elevation: 100,
-                child: GestureDetector(
-                  onTap: () {
-                    onRegisterPressed();
-                  },
-                  child: Container(
-                    width: 159,
-                    height: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.green,
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Register',
-                        style: TextStyle(fontSize: 20, color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+        // bottomNavigationBar: BottomAppBar(
+        //   //color: Colors.purple,
+        //   child: Row(
+        //     children: [
+        //       Padding(
+        //         padding: const EdgeInsets.only(right: 10),
+        //         child: Material(
+        //           elevation: 100,
+        //           child: Container(
+        //             width: 159,
+        //             height: double.infinity,
+        //             decoration: BoxDecoration(
+        //               borderRadius: BorderRadius.circular(10),
+        //               color: Colors.red,
+        //             ),
+        //             child: const Center(
+        //               child: Text(
+        //                 'Save',
+        //                 style: TextStyle(fontSize: 20, color: Colors.white),
+        //               ),
+        //             ),
+        //           ),
+        //         ),
+        //       ),
+        //       Material(
+        //         elevation: 100,
+        //         child: GestureDetector(
+        //           onTap: () {
+        //             onRegisterPressed();
+        //           },
+        //           child: Container(
+        //             width: 159,
+        //             height: double.infinity,
+        //             decoration: BoxDecoration(
+        //               borderRadius: BorderRadius.circular(10),
+        //               color: Colors.green,
+        //             ),
+        //             child: const Center(
+        //               child: Text(
+        //                 'Register',
+        //                 style: TextStyle(fontSize: 20, color: Colors.white),
+        //               ),
+        //             ),
+        //           ),
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
       ),
     );
   }

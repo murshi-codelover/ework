@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:newproject/constants/widgets/mytextfield.dart';
-
-import '../screens/register/registrationscreen.dart';
+import 'package:newproject/presentation/mobilescreens/adminscreen/screens/register/registrationscreen.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -41,8 +40,7 @@ class HomePage extends StatelessWidget {
                   color: Colors.black45,
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                child:
-                    const Center(child: Text('R E G I S T E R E D  W O R K')),
+                child: const Center(child: Text('N O  W O R K S  D R O P E D')),
               ),
             ),
           ),

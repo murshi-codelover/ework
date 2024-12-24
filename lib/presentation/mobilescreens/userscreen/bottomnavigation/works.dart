@@ -55,7 +55,9 @@ class _WorksPageState extends State<WorksPage> {
       ),
       bottomNavigationBar: BottomAppBar(
         child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
             child: const Text(
               'Cancel Registration',
               style: TextStyle(

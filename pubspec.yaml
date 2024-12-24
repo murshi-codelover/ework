@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   provider: ^6.1.2
   timeline_tile: ^2.0.0
+  flutter_login: ^5.0.0
   #firebase_auth: ^5.3.4
 
 dev_dependencies:
