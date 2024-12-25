@@ -23,6 +23,8 @@ class HomePage extends StatelessWidget {
             flexibleSpace: Padding(
               padding: const EdgeInsets.all(1.0),
               child: MyTextField(
+                suffixIcon:
+                    IconButton(onPressed: () {}, icon: Icon(Icons.search)),
                 controller: searchController,
                 HintText: 'Search something...',
                 LabelText: const Text('Search'),

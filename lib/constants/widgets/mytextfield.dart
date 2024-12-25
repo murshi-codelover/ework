@@ -6,9 +6,11 @@ class MyTextField extends StatefulWidget {
   Text LabelText;
   TextEditingController controller;
   bool ObscureText;
+  IconButton suffixIcon;
 
   MyTextField({
     super.key,
+    required this.suffixIcon,
     required this.HintText,
     required this.LabelText,
     required this.controller,
@@ -28,6 +30,7 @@ class _MyTextFieldState extends State<MyTextField> {
         controller: widget.controller,
         obscureText: widget.ObscureText,
         decoration: InputDecoration(
+          suffixIcon: widget.suffixIcon,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),
