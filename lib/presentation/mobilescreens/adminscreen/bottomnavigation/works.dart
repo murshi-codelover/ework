@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:newproject/constants/widgets/mytextfield.dart';
+
+import '../../../../db/workmodel.dart';
 
 class WorksPage extends StatefulWidget {
   const WorksPage({super.key});
@@ -9,146 +12,225 @@ class WorksPage extends StatefulWidget {
 }
 
 class _WorksPageState extends State<WorksPage> {
-  TextEditingController _dateController = TextEditingController();
-  TextEditingController _timeController = TextEditingController();
-  TextEditingController _locationController = TextEditingController();
-  TextEditingController _wageController = TextEditingController();
-  TextEditingController _workController = TextEditingController();
-  TextEditingController _discController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _timeController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
+  final TextEditingController _wageController = TextEditingController();
+  final TextEditingController _workController = TextEditingController();
+  final TextEditingController _discController = TextEditingController();
 
+  List<WorkModel> workList = [];
   DateTime? selectedDate;
-  DateTime? selectedTime;
+  TimeOfDay? selectedTime;
 
-  // Function to show the date picker
+  @override
+  void initState() {
+    super.initState();
+    _loadWorkList();
+  }
+
+  void _loadWorkList() {
+    final box = Hive.box<WorkModel>('workBox');
+    setState(() {
+      workList = box.values.toList();
+    });
+  }
+
   Future<void> _pickDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: selectedDate ?? DateTime.now(), // Default selected date
-      firstDate: DateTime(2000), // Earliest date
-      lastDate: DateTime(2100), // Latest date
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
     );
-
-    if (picked != null && picked != selectedDate) {
+    if (picked != null) {
       setState(() {
         selectedDate = picked;
+        _dateController.text = picked.toString().split(' ')[0];
       });
     }
   }
 
   Future<void> _pickTime(BuildContext context) async {
-    final TimeOfDay? pickedTime = await showTimePicker(
+    final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
     );
-    selectedTime = pickedTime as DateTime?;
-
-    if (pickedTime != null) {
-      _timeController.text = pickedTime.format(context);
+    if (picked != null) {
+      setState(() {
+        selectedTime = picked;
+        _timeController.text = picked.format(context);
+      });
     }
+  }
+
+  void onSubmit() {
+    if (_dateController.text.isEmpty ||
+        _timeController.text.isEmpty ||
+        _locationController.text.isEmpty ||
+        _wageController.text.isEmpty ||
+        _workController.text.isEmpty ||
+        _discController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('All fields are required!')),
+      );
+      return;
+    }
+
+    final box = Hive.box<WorkModel>('workBox');
+    final newWork = WorkModel(
+      date: _dateController.text,
+      time: _timeController.text,
+      location: _locationController.text,
+      wage: _wageController.text,
+      work: _workController.text,
+      description: _discController.text,
+    );
+
+    box.add(newWork); // Add WorkModel instance to Hive
+    setState(() {
+      workList = box.values.toList();
+    });
+
+    // Clear the text fields
+    _dateController.clear();
+    _timeController.clear();
+    _locationController.clear();
+    _wageController.clear();
+    _workController.clear();
+    _discController.clear();
+
+    Navigator.of(context).pop();
   }
 
   void createWork() {
     showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            content: Container(
-              width: double.infinity,
-              height: 500,
-              child: SingleChildScrollView(
-                child: Column(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                MyTextField(
+                  HintText: 'Select a date',
+                  LabelText: const Text('Date'),
+                  controller: _dateController,
+                  ObscureText: false,
+                  suffixIcon: IconButton(
+                    onPressed: () async {
+                      await _pickDate(context);
+                      if (selectedDate != null) {
+                        _dateController.text =
+                            selectedDate!.toString().split(' ')[0];
+                      }
+                    },
+                    icon: const Icon(Icons.calendar_month_rounded),
+                  ),
+                ),
+                MyTextField(
+                  HintText: 'Time',
+                  LabelText: const Text('Select a time'),
+                  controller: _timeController,
+                  ObscureText: false,
+                  suffixIcon: IconButton(
+                    onPressed: () async {
+                      await _pickTime(context);
+                    },
+                    icon: const Icon(Icons.timer),
+                  ),
+                ),
+                MyTextField(
+                  HintText: 'Location',
+                  LabelText: const Text('Location'),
+                  controller: _locationController,
+                  ObscureText: false,
+                  suffixIcon: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.location_pin),
+                  ),
+                ),
+                MyTextField(
+                  HintText: 'Wage',
+                  LabelText: const Text('Wage'),
+                  controller: _wageController,
+                  ObscureText: false,
+                  suffixIcon: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.currency_rupee),
+                  ),
+                ),
+                MyTextField(
+                  HintText: 'Work',
+                  LabelText: const Text('Work'),
+                  controller: _workController,
+                  ObscureText: false,
+                  suffixIcon: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.event),
+                  ),
+                ),
+                MyTextField(
+                  HintText: 'Description',
+                  LabelText: const Text('Description'),
+                  controller: _discController,
+                  ObscureText: false,
+                  suffixIcon: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.notes),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    MyTextField(
-                      HintText: 'Select a date',
-                      LabelText: const Text('Date'),
-                      controller: _dateController,
-                      ObscureText: false,
-                      suffixIcon: IconButton(
-                        onPressed: () async {
-                          await _pickDate(context);
-                          if (selectedDate != null) {
-                            _dateController.text =
-                                selectedDate!.toString().split(' ')[0];
-                          }
-                        },
-                        icon: Icon(Icons.calendar_month_rounded),
-                      ),
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('Cancel'),
                     ),
-                    MyTextField(
-                      HintText: 'Time',
-                      LabelText: const Text('Time'),
-                      controller: _timeController,
-                      ObscureText: false,
-                      suffixIcon: IconButton(
-                          onPressed: () {
-                            if (selectedTime != null) {
-                              _timeController.text = selectedTime!.toString();
-                            }
-                            _pickTime(context);
-                          },
-                          icon: Icon(Icons.timer)),
+                    TextButton(
+                      onPressed: onSubmit,
+                      child: const Text('Submit'),
                     ),
-                    MyTextField(
-                      HintText: 'Location',
-                      LabelText: const Text('Location'),
-                      controller: _dateController,
-                      ObscureText: false,
-                      suffixIcon: IconButton(
-                          onPressed: () {}, icon: Icon(Icons.search)),
-                    ),
-                    MyTextField(
-                      HintText: 'Wage',
-                      LabelText: const Text('Wage'),
-                      controller: _dateController,
-                      ObscureText: false,
-                      suffixIcon: IconButton(
-                          onPressed: () {}, icon: Icon(Icons.search)),
-                    ),
-                    MyTextField(
-                      HintText: 'Work',
-                      LabelText: const Text('Work'),
-                      controller: _dateController,
-                      ObscureText: false,
-                      suffixIcon: IconButton(
-                          onPressed: () {}, icon: Icon(Icons.search)),
-                    ),
-                    MyTextField(
-                      HintText: 'Discription',
-                      LabelText: const Text('Discription'),
-                      controller: _dateController,
-                      ObscureText: false,
-                      suffixIcon: IconButton(
-                          onPressed: () {}, icon: Icon(Icons.search)),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text('Cancel')),
-                        TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text('Submit')),
-                      ],
-                    )
                   ],
                 ),
-              ),
+              ],
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        children: const [],
+      appBar: AppBar(
+        title: const Text('Work Details'),
       ),
+      body: workList.isEmpty
+          ? const Center(child: Text('No data available'))
+          : ListView.builder(
+              itemCount: workList.length,
+              itemBuilder: (context, index) {
+                final work = workList[index];
+                return Card(
+                  margin: const EdgeInsets.all(8.0),
+                  child: ListTile(
+                    title: Text(work.work ?? 'No Title'),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Date: ${work.date ?? 'N/A'}'),
+                        Text('Time: ${work.time ?? 'N/A'}'),
+                        Text('Location: ${work.location ?? 'N/A'}'),
+                        Text('Wage: ${work.wage ?? 'N/A'}'),
+                        Text('Description: ${work.description ?? 'N/A'}'),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: createWork,
         child: const Icon(Icons.add),
@@ -156,3 +238,75 @@ class _WorksPageState extends State<WorksPage> {
     );
   }
 }
+
+
+
+
+    // MyTextField(
+    //                 HintText: 'Select a date',
+    //                 LabelText: const Text('Date'),
+    //                 controller: _dateController,
+    //                 ObscureText: false,
+    //                 suffixIcon: IconButton(
+    //                   onPressed: () async {
+    //                     await _pickDate(context);
+    //                     if (selectedDate != null) {
+    //                       _dateController.text =
+    //                           selectedDate!.toString().split(' ')[0];
+    //                     }
+    //                   },
+    //                   icon: const Icon(Icons.calendar_month_rounded),
+    //                 ),
+    //               ),
+    //               MyTextField(
+    //                 HintText: 'Time',
+    //                 LabelText: const Text('Select a time'),
+    //                 controller: _timeController,
+    //                 ObscureText: false,
+    //                 suffixIcon: IconButton(
+    //                   onPressed: () async {
+    //                     await _pickTime(context);
+    //                   },
+    //                   icon: const Icon(Icons.timer),
+    //                 ),
+    //               ),
+    //               MyTextField(
+    //                 HintText: 'Location',
+    //                 LabelText: const Text('Location'),
+    //                 controller: _locationController,
+    //                 ObscureText: false,
+    //                 suffixIcon: IconButton(
+    //                   onPressed: () {},
+    //                   icon: const Icon(Icons.location_pin),
+    //                 ),
+    //               ),
+    //               MyTextField(
+    //                 HintText: 'Wage',
+    //                 LabelText: const Text('Wage'),
+    //                 controller: _wageController,
+    //                 ObscureText: false,
+    //                 suffixIcon: IconButton(
+    //                   onPressed: () {},
+    //                   icon: const Icon(Icons.currency_rupee),
+    //                 ),
+    //               ),
+    //               MyTextField(
+    //                 HintText: 'Work',
+    //                 LabelText: const Text('Work'),
+    //                 controller: _workController,
+    //                 ObscureText: false,
+    //                 suffixIcon: IconButton(
+    //                   onPressed: () {},
+    //                   icon: const Icon(Icons.event),
+    //                 ),
+    //               ),
+    //               MyTextField(
+    //                 HintText: 'Description',
+    //                 LabelText: const Text('Description'),
+    //                 controller: _discController,
+    //                 ObscureText: false,
+    //                 suffixIcon: IconButton(
+    //                   onPressed: () {},
+    //                   icon: const Icon(Icons.notes),
+    //                 ),
+    //               ),

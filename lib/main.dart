@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:newproject/constants/colors/themeprovider.dart';
 import 'package:newproject/presentation/Auth/login.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+import 'db/workmodel.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter(); // Initialize Hive for Flutter
+  Hive.registerAdapter(
+      WorkModelAdapter()); // Register the adapter for WorkModel
+  await Hive.openBox<WorkModel>('workBox'); // Open the box
+
   runApp(ChangeNotifierProvider(
     create: (context) => ThemeProvider(),
     child: const MyApp(),

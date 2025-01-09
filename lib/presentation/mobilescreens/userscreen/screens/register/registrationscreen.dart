@@ -2,8 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:newproject/presentation/mobilescreens/userscreen/bottomnavigation/works.dart';
 
 class RegistrationScreen extends StatefulWidget {
-  final String img;
-  const RegistrationScreen({super.key, required this.img});
+  final String date;
+  final String time;
+  final String location;
+  final String wage;
+  final String work;
+  final String description;
+
+  const RegistrationScreen({
+    super.key,
+    required this.date,
+    required this.time,
+    required this.location,
+    required this.wage,
+    required this.work,
+    required this.description,
+  });
 
   @override
   State<RegistrationScreen> createState() => _RegistrationScreenState();
@@ -60,8 +74,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return SafeArea(
       child: Scaffold(
         body: ListView(
-          children: const [
-            SizedBox(
+          children: [
+            const SizedBox(
               width: double.infinity,
               height: 300,
               child: Icon(
@@ -79,13 +93,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     Align(
                         alignment: Alignment.topLeft,
                         child: Padding(
-                          padding: EdgeInsets.only(left: 20, top: 10),
+                          padding: const EdgeInsets.only(left: 20, top: 10),
                           child: Text(
-                            '500\$',
-                            style: TextStyle(fontSize: 50),
+                            '${widget.wage}\$',
+                            style: const TextStyle(fontSize: 50),
                           ),
                         )),
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(left: 25),
                       child: Text(
                         'Event: Golden leaf',
@@ -93,35 +107,35 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       ),
                     ),
                     Padding(
-                        padding: EdgeInsets.only(left: 25),
+                        padding: const EdgeInsets.only(left: 25),
                         child: Row(
                           children: [
-                            Icon(Icons.calendar_month),
+                            const Icon(Icons.calendar_month),
                             Text(
-                              ' 11-12-2024 ',
-                              style: TextStyle(fontSize: 18),
+                              ' ${widget.date}',
+                              style: const TextStyle(fontSize: 18),
                             ),
-                            SizedBox(width: 30),
-                            Icon(Icons.timer),
+                            const SizedBox(width: 30),
+                            const Icon(Icons.timer),
                             Text(
-                              ' 8:30 AM',
-                              style: TextStyle(fontSize: 18),
+                              ' ${widget.time}',
+                              style: const TextStyle(fontSize: 18),
                             )
                           ],
                         )),
                     Padding(
-                      padding: EdgeInsets.only(left: 25),
+                      padding: const EdgeInsets.only(left: 25),
                       child: Row(
                         children: [
-                          Icon(Icons.location_pin),
+                          const Icon(Icons.location_pin),
                           Text(
-                            ' Uthram,Thodupuzha',
-                            style: TextStyle(fontSize: 18),
+                            ' ${widget.location}',
+                            style: const TextStyle(fontSize: 18),
                           ),
                         ],
                       ),
                     ),
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(left: 25),
                       child: Row(
                         children: [
@@ -133,7 +147,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ],
                       ),
                     ),
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(left: 25),
                       child: Row(
                         children: [

@@ -1,153 +1,155 @@
 import 'package:flutter/material.dart';
-import 'package:newproject/constants/widgets/mytextfield.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
+import '../../../../db/workmodel.dart';
 import '../screens/register/registrationscreen.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    TextEditingController searchController = TextEditingController();
+  State<HomePage> createState() => _HomePageState();
+}
 
+class _HomePageState extends State<HomePage> {
+  //late final Box<WorkModel> workBox;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Initialize the box
+    //   try {
+    //     workBox = Hive.box<WorkModel>('workBox');
+    //   } catch (e) {
+    //     print('Error initializing Hive box: $e');
+    //   }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: CustomScrollView(
-        slivers: [
-          // SliverAppBar for Search Bar
-          SliverAppBar(
-            pinned: false,
-            floating: true,
-            // backgroundColor: Colors.white,
-            toolbarHeight: 85,
-            flexibleSpace: Padding(
-              padding: const EdgeInsets.all(1.0),
-              child: MyTextField(
-                suffixIcon:
-                    IconButton(onPressed: () {}, icon: Icon(Icons.search)),
-                controller: searchController,
-                HintText: 'Search something...',
-                LabelText: const Text('Search'),
-                ObscureText: false,
-              ),
-            ),
-          ),
-          // SliverList for the top container
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: double.infinity,
-                height: 150,
-                decoration: BoxDecoration(
-                  color: Colors.black45,
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child:
-                    const Center(child: Text('R E G I S T E R E D  W O R K')),
-              ),
-            ),
-          ),
-          // SliverGrid for the GridView
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            sliver: SliverGrid(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return Material(
-                    elevation: 100,
-                    borderRadius: BorderRadius.circular(10),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => RegistrationScreen(
-                                  img: index == 0 ||
-                                          index == 3 ||
-                                          index == 4 ||
-                                          index == 7 ||
-                                          index == 8
-                                      ? 'assets/cardcover/juice.jpeg'
-                                      : 'assets/cardcover/catering.jpeg',
-                                )));
-                      },
-                      child: Container(
-                        child: const Column(
-                          children: [
-                            SizedBox(
-                                width: double.infinity,
-                                height: 140,
-                                child: CircleAvatar(
-                                  child: Icon(
-                                    Icons.food_bank,
-                                    size: 50,
-                                  ),
-                                )),
-                            Text(
-                              'Golden Leaf',
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            Text(
-                              'Catering work',
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.calendar_month,
-                                  size: 12,
-                                ),
-                                Text(' 21-12-24',
-                                    style: TextStyle(fontSize: 12))
-                              ],
-                            ),
-                            // const Row(
-                            //   mainAxisAlignment: MainAxisAlignment.center,
-                            //   children: [
-                            //     Icon(
-                            //       Icons.location_pin,
-                            //       size: 12,
-                            //     ),
-                            //     Text(
-                            //       ' Thodupuzha',
-                            //       style: TextStyle(fontSize: 12),
-                            //     )
-                            //   ],
-                            // )
-                          ],
-                        ),
-                        // child: Container(
-                        //   decoration: BoxDecoration(
-                        //       color: Colors.blue,
-                        //       borderRadius: BorderRadius.circular(8.0),
-                        //       image: DecorationImage(
-                        //           image: AssetImage(
-                        //             index == 0 ||
-                        //                     index == 3 ||
-                        //                     index == 4 ||
-                        //                     index == 7 ||
-                        //                     index == 8
-                        //                 ? 'assets/cardcover/juice.jpeg'
-                        //                 : 'assets/cardcover/catering.jpeg',
-                        //           ),
-                        //           fit: BoxFit.fill)),
-                        // ),
-                        //    ),
+      body: ValueListenableBuilder<Box<WorkModel>>(
+        valueListenable: Hive.box<WorkModel>('workBox').listenable(),
+        builder: (context, box, _) {
+          if (box.isEmpty) {
+            return const Center(child: Text('No Work Items Found'));
+          }
+
+          List<WorkModel> items = box.values.toList();
+
+          return CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                pinned: false,
+                floating: true,
+                toolbarHeight: 85,
+                flexibleSpace: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    onChanged: (value) {
+                      setState(() {
+                        items = box.values
+                            .where((item) =>
+                                item.work
+                                    ?.toLowerCase()
+                                    .contains(value.toLowerCase()) ??
+                                false)
+                            .toList();
+                      });
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Search something...',
+                      prefixIcon: const Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
                     ),
-                  );
-                },
-                childCount: 10,
+                  ),
+                ),
               ),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 10.0,
-                crossAxisSpacing: 10.0,
-                childAspectRatio: 0.8,
+              SliverToBoxAdapter(
+                child: Container(
+                  margin: const EdgeInsets.all(8.0),
+                  height: 150,
+                  decoration: BoxDecoration(
+                    color: Colors.black45,
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: const Center(
+                    child: Text('REGISTERED WORK'),
+                  ),
+                ),
               ),
-            ),
-          ),
-        ],
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                sliver: SliverGrid(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 8.0,
+                    mainAxisSpacing: 8.0,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final workItem = items[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => RegistrationScreen(
+                                date: workItem.date ?? 'No Date',
+                                time: workItem.time ?? 'No Time',
+                                location: workItem.location ?? 'No Location',
+                                wage: workItem.wage ?? 'No Wage',
+                                work: workItem.work ?? 'No Work',
+                                description:
+                                    workItem.description ?? 'No Description',
+                              ),
+                            ),
+                          );
+                        },
+                        child: Card(
+                          color: Colors.white,
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const CircleAvatar(
+                                radius: 40,
+                                child: Icon(Icons.work_outline),
+                              ),
+                              const SizedBox(height: 8),
+                              const Text(
+                                'Golden caters',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                workItem.work ?? 'No Title',
+                              ),
+                              Text(
+                                workItem.date ?? 'not valid',
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                    childCount: items.length,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

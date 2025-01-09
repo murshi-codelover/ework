@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:newproject/constants/widgets/mytextfield.dart';
-import 'package:newproject/presentation/mobilescreens/adminscreen/screens/register/registrationscreen.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -22,8 +21,8 @@ class HomePage extends StatelessWidget {
             flexibleSpace: Padding(
               padding: const EdgeInsets.all(1.0),
               child: MyTextField(
-                suffixIcon:
-                    IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+                suffixIcon: IconButton(
+                    onPressed: () {}, icon: const Icon(Icons.search)),
                 controller: searchController,
                 HintText: 'Search something...',
                 LabelText: const Text('Search'),
@@ -57,16 +56,16 @@ class HomePage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => RegistrationScreen(
-                                  img: index == 0 ||
-                                          index == 3 ||
-                                          index == 4 ||
-                                          index == 7 ||
-                                          index == 8
-                                      ? 'assets/cardcover/juice.jpeg'
-                                      : 'assets/cardcover/catering.jpeg',
-                                )));
+                        // Navigator.of(context).push(MaterialPageRoute(
+                        //     builder: (context) => RegistrationScreen(
+                        //           img: index == 0 ||
+                        //                   index == 3 ||
+                        //                   index == 4 ||
+                        //                   index == 7 ||
+                        //                   index == 8
+                        //               ? 'assets/cardcover/juice.jpeg'
+                        //               : 'assets/cardcover/catering.jpeg',
+                        //         )));'assets/cardcover/juice.jpeg'
                       },
                       child: Container(
                         child: const Column(

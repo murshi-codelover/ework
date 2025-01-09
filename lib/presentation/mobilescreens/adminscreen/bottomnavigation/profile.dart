@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../Auth/login.dart';
+
 class ABM extends StatelessWidget {
   const ABM({super.key});
 
@@ -11,7 +13,7 @@ class ABM extends StatelessWidget {
       );
     }
 
-    TextEditingController nameController = TextEditingController();
+    // TextEditingController nameController = TextEditingController();
     return Scaffold(
         body: SafeArea(
       child: Scaffold(
@@ -58,6 +60,14 @@ class ABM extends StatelessWidget {
               ),
             ),
           ],
+        ),
+        bottomNavigationBar: BottomAppBar(
+          child: TextButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => LogIn()));
+              },
+              child: const Text('Logout')),
         ),
       ),
     ));
