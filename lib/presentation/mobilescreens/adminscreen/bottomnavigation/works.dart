@@ -146,7 +146,7 @@ class _WorksPageState extends State<WorksPage> {
                   controller: _locationController,
                   ObscureText: false,
                   suffixIcon: IconButton(
-                    onPressed: () {},
+                    onPressed: () async {},
                     icon: const Icon(Icons.location_pin),
                   ),
                 ),
@@ -238,75 +238,3 @@ class _WorksPageState extends State<WorksPage> {
     );
   }
 }
-
-
-
-
-    // MyTextField(
-    //                 HintText: 'Select a date',
-    //                 LabelText: const Text('Date'),
-    //                 controller: _dateController,
-    //                 ObscureText: false,
-    //                 suffixIcon: IconButton(
-    //                   onPressed: () async {
-    //                     await _pickDate(context);
-    //                     if (selectedDate != null) {
-    //                       _dateController.text =
-    //                           selectedDate!.toString().split(' ')[0];
-    //                     }
-    //                   },
-    //                   icon: const Icon(Icons.calendar_month_rounded),
-    //                 ),
-    //               ),
-    //               MyTextField(
-    //                 HintText: 'Time',
-    //                 LabelText: const Text('Select a time'),
-    //                 controller: _timeController,
-    //                 ObscureText: false,
-    //                 suffixIcon: IconButton(
-    //                   onPressed: () async {
-    //                     await _pickTime(context);
-    //                   },
-    //                   icon: const Icon(Icons.timer),
-    //                 ),
-    //               ),
-    //               MyTextField(
-    //                 HintText: 'Location',
-    //                 LabelText: const Text('Location'),
-    //                 controller: _locationController,
-    //                 ObscureText: false,
-    //                 suffixIcon: IconButton(
-    //                   onPressed: () {},
-    //                   icon: const Icon(Icons.location_pin),
-    //                 ),
-    //               ),
-    //               MyTextField(
-    //                 HintText: 'Wage',
-    //                 LabelText: const Text('Wage'),
-    //                 controller: _wageController,
-    //                 ObscureText: false,
-    //                 suffixIcon: IconButton(
-    //                   onPressed: () {},
-    //                   icon: const Icon(Icons.currency_rupee),
-    //                 ),
-    //               ),
-    //               MyTextField(
-    //                 HintText: 'Work',
-    //                 LabelText: const Text('Work'),
-    //                 controller: _workController,
-    //                 ObscureText: false,
-    //                 suffixIcon: IconButton(
-    //                   onPressed: () {},
-    //                   icon: const Icon(Icons.event),
-    //                 ),
-    //               ),
-    //               MyTextField(
-    //                 HintText: 'Description',
-    //                 LabelText: const Text('Description'),
-    //                 controller: _discController,
-    //                 ObscureText: false,
-    //                 suffixIcon: IconButton(
-    //                   onPressed: () {},
-    //                   icon: const Icon(Icons.notes),
-    //                 ),
-    //               ),

@@ -87,8 +87,9 @@ class _HomePageState extends State<HomePage> {
                 sliver: SliverGrid(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    crossAxisSpacing: 8.0,
-                    mainAxisSpacing: 8.0,
+                    crossAxisSpacing: 2.0,
+                    mainAxisSpacing: 5.0,
+                    childAspectRatio: 3 / 4,
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
@@ -110,33 +111,68 @@ class _HomePageState extends State<HomePage> {
                           );
                         },
                         child: Card(
-                          color: Colors.white,
-                          elevation: 5,
+                          //color: Colors.white,
+                          elevation: 10,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                          child: Stack(
                             children: [
-                              const CircleAvatar(
-                                radius: 40,
-                                child: Icon(Icons.work_outline),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const CircleAvatar(
+                                    radius: 58,
+                                    child: Icon(Icons.food_bank, size: 60),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  const Text(
+                                    'Golden caters',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  // Text(
+                                  //   workItem.work ?? 'No Title',
+                                  // ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.calendar_month,
+                                        size: 18,
+                                      ),
+                                      Text(
+                                        workItem.date ?? 'not valid',
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.people,
+                                        size: 18,
+                                      ),
+                                      const Text(
+                                        '17/20' ?? 'not valid',
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
-                              const SizedBox(height: 8),
-                              const Text(
-                                'Golden caters',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
+                              Container(
+                                width: 30,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Colors.deepPurple,
                                 ),
-                              ),
-                              Text(
-                                workItem.work ?? 'No Title',
-                              ),
-                              Text(
-                                workItem.date ?? 'not valid',
-                                textAlign: TextAlign.center,
+                                child: Icon(Icons.water),
                               ),
                             ],
                           ),

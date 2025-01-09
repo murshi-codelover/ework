@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:newproject/presentation/Auth/login.dart';
+import 'package:newproject/constants/widgets/mytextfield.dart';
+
+import '../../../Auth/login.dart';
 
 class ABM extends StatelessWidget {
   const ABM({super.key});
@@ -13,6 +15,9 @@ class ABM extends StatelessWidget {
     }
 
     TextEditingController nameController = TextEditingController();
+    TextEditingController phoneController = TextEditingController();
+    //  TextEditingController Controller = TextEditingController();
+    //  TextEditingController nameController = TextEditingController();
     return Scaffold(
         body: SafeArea(
       child: Scaffold(
@@ -41,9 +46,9 @@ class ABM extends StatelessWidget {
                 },
                 child: Container(
                   width: double.infinity,
-                  height: 80,
+                  height: 50,
                   decoration: BoxDecoration(
-                      color: Colors.grey,
+                      color: Colors.blueGrey,
                       borderRadius: BorderRadius.circular(10)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -52,7 +57,78 @@ class ABM extends StatelessWidget {
                         '       Edit profile',
                         style: TextStyle(fontSize: 17),
                       ),
-                      IconButton(onPressed: () {}, icon: const Icon(Icons.edit))
+                      IconButton(
+                          onPressed: () {
+                            showBottomSheet(
+                                backgroundColor: Colors.blue.shade100,
+                                context: context,
+                                builder: (context) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        children: [
+                                          MyTextField(
+                                            suffixIcon: IconButton(
+                                                onPressed: () {},
+                                                icon: Icon(Icons.person)),
+                                            HintText: 'Enter your name',
+                                            LabelText: Text('Name'),
+                                            controller: nameController,
+                                            ObscureText: false,
+                                          ),
+                                          MyTextField(
+                                            suffixIcon: IconButton(
+                                                onPressed: () {},
+                                                icon: Icon(Icons.phone)),
+                                            HintText: 'Enter your phone number',
+                                            LabelText: Text('Phone Number'),
+                                            controller: phoneController,
+                                            ObscureText: false,
+                                          ),
+                                          MyTextField(
+                                            suffixIcon: IconButton(
+                                                onPressed: () {},
+                                                icon: Icon(Icons.person)),
+                                            HintText: 'Enter your name',
+                                            LabelText: Text('Name'),
+                                            controller: nameController,
+                                            ObscureText: false,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Material(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                elevation: 10,
+                                                child: TextButton(
+                                                    onPressed: () {},
+                                                    child: Text("Cancel")),
+                                              ),
+                                              Material(
+                                                color: Colors.deepPurple,
+                                                elevation: 10,
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                child: TextButton(
+                                                    onPressed: () {},
+                                                    child: Text(
+                                                      "Save",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    )),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                });
+                          },
+                          icon: const Icon(Icons.edit))
                     ],
                   ),
                 ),
@@ -66,7 +142,10 @@ class ABM extends StatelessWidget {
                 Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => LogIn()));
               },
-              child: const Text('Logout')),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [const Text('Logout  '), Icon(Icons.logout)],
+              )),
         ),
       ),
     ));

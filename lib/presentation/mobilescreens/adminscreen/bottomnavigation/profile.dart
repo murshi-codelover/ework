@@ -42,7 +42,7 @@ class ABM extends StatelessWidget {
                 },
                 child: Container(
                   width: double.infinity,
-                  height: 80,
+                  height: 50,
                   decoration: BoxDecoration(
                       color: Colors.grey,
                       borderRadius: BorderRadius.circular(10)),
@@ -53,7 +53,31 @@ class ABM extends StatelessWidget {
                         '       Edit profile',
                         style: TextStyle(fontSize: 17),
                       ),
-                      IconButton(onPressed: () {}, icon: const Icon(Icons.edit))
+                      IconButton(
+                          onPressed: () {
+                            showBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return Container(
+                                    height: 200,
+                                    child: Column(
+                                      children: [
+                                        TextField(
+                                          controller: TextEditingController(),
+                                          decoration: const InputDecoration(
+                                            labelText: 'Name',
+                                            hintText: 'Enter your name',
+                                          ),
+                                        ),
+                                        ElevatedButton(
+                                            onPressed: () {},
+                                            child: const Text('Save'))
+                                      ],
+                                    ),
+                                  );
+                                });
+                          },
+                          icon: const Icon(Icons.edit))
                     ],
                   ),
                 ),
@@ -67,7 +91,10 @@ class ABM extends StatelessWidget {
                 Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => LogIn()));
               },
-              child: const Text('Logout')),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [const Text('Logout  '), Icon(Icons.logout)],
+              )),
         ),
       ),
     ));

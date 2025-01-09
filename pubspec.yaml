@@ -43,6 +43,11 @@ dependencies:
   hive: ^2.2.3
   page_route_animator: ^1.0.4
   shared_preferences: ^2.3.5
+  google_maps_flutter: ^2.10.0
+  geolocator: ^13.0.2
+  permission_handler: ^11.3.1
+ 
+
   #firebase_auth: ^5.3.4
 
 dev_dependencies:
