@@ -106,6 +106,7 @@ class _HomePageState extends State<HomePage> {
                                 work: workItem.work ?? 'No Work',
                                 description:
                                     workItem.description ?? 'No Description',
+                                workers: workItem.workers ?? 'No Workers',
                               ),
                             ),
                           );
@@ -140,7 +141,7 @@ class _HomePageState extends State<HomePage> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Icon(
+                                      const Icon(
                                         Icons.calendar_month,
                                         size: 18,
                                       ),
@@ -157,8 +158,8 @@ class _HomePageState extends State<HomePage> {
                                         Icons.people,
                                         size: 18,
                                       ),
-                                      const Text(
-                                        '17/20' ?? 'not valid',
+                                      Text(
+                                        '${workItem.registeredWorkers}/${workItem.workers}',
                                         textAlign: TextAlign.center,
                                       ),
                                     ],
@@ -172,7 +173,7 @@ class _HomePageState extends State<HomePage> {
                                   borderRadius: BorderRadius.circular(5),
                                   color: Colors.deepPurple,
                                 ),
-                                child: Icon(Icons.water),
+                                child: const Icon(Icons.water),
                               ),
                             ],
                           ),

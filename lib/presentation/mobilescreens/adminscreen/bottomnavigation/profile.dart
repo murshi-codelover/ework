@@ -58,7 +58,7 @@ class ABM extends StatelessWidget {
                             showBottomSheet(
                                 context: context,
                                 builder: (context) {
-                                  return Container(
+                                  return SizedBox(
                                     height: 200,
                                     child: Column(
                                       children: [
@@ -91,9 +91,9 @@ class ABM extends StatelessWidget {
                 Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => LogIn()));
               },
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [const Text('Logout  '), Icon(Icons.logout)],
+                children: [Text('Logout  '), Icon(Icons.logout)],
               )),
         ),
       ),

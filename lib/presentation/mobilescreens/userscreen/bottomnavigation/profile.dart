@@ -71,27 +71,28 @@ class ABM extends StatelessWidget {
                                           MyTextField(
                                             suffixIcon: IconButton(
                                                 onPressed: () {},
-                                                icon: Icon(Icons.person)),
+                                                icon: const Icon(Icons.person)),
                                             HintText: 'Enter your name',
-                                            LabelText: Text('Name'),
+                                            LabelText: const Text('Name'),
                                             controller: nameController,
                                             ObscureText: false,
                                           ),
                                           MyTextField(
                                             suffixIcon: IconButton(
                                                 onPressed: () {},
-                                                icon: Icon(Icons.phone)),
+                                                icon: const Icon(Icons.phone)),
                                             HintText: 'Enter your phone number',
-                                            LabelText: Text('Phone Number'),
+                                            LabelText:
+                                                const Text('Phone Number'),
                                             controller: phoneController,
                                             ObscureText: false,
                                           ),
                                           MyTextField(
                                             suffixIcon: IconButton(
                                                 onPressed: () {},
-                                                icon: Icon(Icons.person)),
+                                                icon: const Icon(Icons.person)),
                                             HintText: 'Enter your name',
-                                            LabelText: Text('Name'),
+                                            LabelText: const Text('Name'),
                                             controller: nameController,
                                             ObscureText: false,
                                           ),
@@ -105,7 +106,8 @@ class ABM extends StatelessWidget {
                                                 elevation: 10,
                                                 child: TextButton(
                                                     onPressed: () {},
-                                                    child: Text("Cancel")),
+                                                    child:
+                                                        const Text("Cancel")),
                                               ),
                                               Material(
                                                 color: Colors.deepPurple,
@@ -114,7 +116,7 @@ class ABM extends StatelessWidget {
                                                     BorderRadius.circular(20),
                                                 child: TextButton(
                                                     onPressed: () {},
-                                                    child: Text(
+                                                    child: const Text(
                                                       "Save",
                                                       style: TextStyle(
                                                           color: Colors.white),
@@ -142,9 +144,9 @@ class ABM extends StatelessWidget {
                 Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => LogIn()));
               },
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [const Text('Logout  '), Icon(Icons.logout)],
+                children: [Text('Logout  '), Icon(Icons.logout)],
               )),
         ),
       ),

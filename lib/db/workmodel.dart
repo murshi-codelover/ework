@@ -22,6 +22,12 @@ class WorkModel extends HiveObject {
   @HiveField(5)
   String? description;
 
+  @HiveField(6)
+  String? workers;
+
+  @HiveField(7)
+  int registeredWorkers = 0;
+
   WorkModel({
     this.date,
     this.time,
@@ -29,6 +35,8 @@ class WorkModel extends HiveObject {
     this.wage,
     this.work,
     this.description,
+    this.workers,
+    this.registeredWorkers = 0,
   });
 
   // Factory constructor to create a WorkModel from a Map
@@ -40,6 +48,7 @@ class WorkModel extends HiveObject {
       wage: map['wage'] as String?,
       work: map['work'] as String?,
       description: map['description'] as String?,
+      workers: map['workers'] as String?,
     );
   }
 
@@ -52,6 +61,7 @@ class WorkModel extends HiveObject {
       'wage': wage,
       'work': work,
       'description': description,
+      'workers': workers,
     };
   }
 }

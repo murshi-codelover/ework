@@ -23,13 +23,14 @@ class WorkModelAdapter extends TypeAdapter<WorkModel> {
       wage: fields[3] as String?,
       work: fields[4] as String?,
       description: fields[5] as String?,
+      workers: fields[6] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, WorkModel obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.date)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class WorkModelAdapter extends TypeAdapter<WorkModel> {
       ..writeByte(4)
       ..write(obj.work)
       ..writeByte(5)
-      ..write(obj.description);
+      ..write(obj.description)
+      ..writeByte(6)
+      ..write(obj.workers);
   }
 
   @override

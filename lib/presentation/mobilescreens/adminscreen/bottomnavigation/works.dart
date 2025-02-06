@@ -18,6 +18,7 @@ class _WorksPageState extends State<WorksPage> {
   final TextEditingController _wageController = TextEditingController();
   final TextEditingController _workController = TextEditingController();
   final TextEditingController _discController = TextEditingController();
+  final TextEditingController _workersController = TextEditingController();
 
   List<WorkModel> workList = [];
   DateTime? selectedDate;
@@ -70,7 +71,8 @@ class _WorksPageState extends State<WorksPage> {
         _locationController.text.isEmpty ||
         _wageController.text.isEmpty ||
         _workController.text.isEmpty ||
-        _discController.text.isEmpty) {
+        _discController.text.isEmpty ||
+        _workersController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('All fields are required!')),
       );
@@ -85,6 +87,7 @@ class _WorksPageState extends State<WorksPage> {
       wage: _wageController.text,
       work: _workController.text,
       description: _discController.text,
+      workers: _workersController.text,
     );
 
     box.add(newWork); // Add WorkModel instance to Hive
@@ -99,6 +102,7 @@ class _WorksPageState extends State<WorksPage> {
     _wageController.clear();
     _workController.clear();
     _discController.clear();
+    _workersController.clear();
 
     Navigator.of(context).pop();
   }
@@ -148,6 +152,16 @@ class _WorksPageState extends State<WorksPage> {
                   suffixIcon: IconButton(
                     onPressed: () async {},
                     icon: const Icon(Icons.location_pin),
+                  ),
+                ),
+                MyTextField(
+                  HintText: 'workers',
+                  LabelText: const Text('Workers'),
+                  controller: _workersController,
+                  ObscureText: false,
+                  suffixIcon: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.person),
                   ),
                 ),
                 MyTextField(

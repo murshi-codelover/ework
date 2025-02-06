@@ -17,6 +17,7 @@ class RegistrationScreen extends StatefulWidget {
     required this.wage,
     required this.work,
     required this.description,
+    required String workers,
   });
 
   @override
@@ -24,6 +25,7 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  String count = ' 0';
   void onRegisterPressed() {
     showDialog(
         context: context,
@@ -147,14 +149,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ],
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 25),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 25),
                       child: Row(
                         children: [
-                          Icon(Icons.people),
+                          const Icon(Icons.people),
                           Text(
-                            '  17/20',
-                            style: TextStyle(fontSize: 18),
+                            count,
+                            style: const TextStyle(fontSize: 18),
                           ),
                         ],
                       ),
