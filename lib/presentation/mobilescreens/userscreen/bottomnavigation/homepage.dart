@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../../db/workmodel.dart';
+import '../screens/register/registrationscreen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -30,7 +33,7 @@ class _HomePageState extends State<HomePage> {
                 });
               },
               decoration: InputDecoration(
-                hintText: 'Search something...',
+                hintText: 'Search work...',
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
@@ -39,23 +42,27 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
 
+          // 🔥 Fetch Firestore Data
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream: _firestore.collection('workCollection').snapshots(),
+              stream: _firestore
+                  .collection('works')
+                  .orderBy('date', descending: true) // Ensure data order
+                  .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                if (!snapshot.hasData || snapshot.data?.docs.isEmpty == true) {
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                   return const Center(child: Text('No Work Items Found'));
                 }
 
-                // Convert Firestore documents to WorkModel list
+                // Convert Firestore data to WorkModel list
                 List<WorkModel> items = snapshot.data!.docs
                     .map((doc) => WorkModel.fromFirestore(doc))
                     .toList();
 
-                // 🔍 Filter by search query
+                // 🔍 Filter items based on search
                 if (searchQuery.isNotEmpty) {
                   items = items
                       .where((item) => item.work
@@ -75,9 +82,35 @@ class _HomePageState extends State<HomePage> {
                   itemCount: items.length,
                   itemBuilder: (context, index) {
                     final workItem = items[index];
+
                     return GestureDetector(
                       onTap: () {
-                        // Navigate to another screen (implement as needed)
+                        final uuid = Uuid();
+                        String generatedUserId =
+                            uuid.v4(); // Generates a unique ID
+
+                        final workItem = items[index]; // Get the selected item
+                        // Check if the user is logged in
+                        final user = FirebaseAuth.instance.currentUser;
+                        if (user != null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RegistrationScreen(
+                                date: workItem.date ?? '',
+                                workers: workItem.workers ?? '',
+                                description: workItem.description ?? '',
+                                location: workItem.location ?? '',
+                                time: workItem.time ?? '',
+                                work: workItem.work,
+                                wage: workItem.wage ?? '',
+                                userId: user.uid, // ✅ Assign Firebase user ID
+                              ),
+                            ),
+                          );
+                        } else {
+                          print("User not logged in!");
+                        }
                       },
                       child: Card(
                         elevation: 10,
@@ -106,7 +139,7 @@ class _HomePageState extends State<HomePage> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     const Icon(Icons.calendar_month, size: 18),
-                                    Text(workItem.date ?? 'Not valid'),
+                                    Text(workItem.date ?? 'No Date'),
                                   ],
                                 ),
                               ],

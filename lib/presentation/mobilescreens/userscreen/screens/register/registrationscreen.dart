@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:newproject/presentation/mobilescreens/userscreen/bottomnavigation/works.dart';
 
 class RegistrationScreen extends StatefulWidget {
+  final String userId;
   final String date;
   final String time;
   final String location;
@@ -19,6 +21,7 @@ class RegistrationScreen extends StatefulWidget {
     required this.work,
     required this.description,
     required this.workers,
+    required this.userId,
   });
 
   @override
@@ -26,10 +29,48 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  String count = ' 0';
+  String count = '0';
+
+  // 🔥 Function to register the work
+  Future<void> registerWork() async {
+    try {
+      final firestore = FirebaseFirestore.instance;
+
+      // ✅ Generate Firestore unique ID
+      String newUserId = firestore.collection('users').doc().id;
+
+      // ✅ Check if the user already registered for this work
+      final query = await firestore
+          .collection('workRegistrations') // Corrected collection name
+          .where('userId', isEqualTo: widget.userId)
+          .where('work', isEqualTo: widget.work)
+          .get();
+
+      if (query.docs.isNotEmpty) {
+        print('User already registered for this work.');
+        return;
+      }
+
+      // ✅ If not registered, add new work
+      await firestore.collection('WorkRegistration').doc(newUserId).set({
+        'userId': newUserId, // ✅ Assign Firestore-generated ID
+        'work': widget.work,
+        'date': widget.date,
+        'location': widget.location,
+        'wage': widget.wage,
+        'description': widget.description,
+        'workers': widget.workers,
+        'time': widget.time,
+        'registeredAt': FieldValue.serverTimestamp(),
+      });
+
+      print('Work registered successfully!');
+    } catch (e) {
+      print('Error registering work: $e');
+    }
+  }
 
   void onRegisterPressed() async {
-    // final box = await Hive.openBox<WorkModel>('workBox');
     showDialog(
         context: context,
         builder: (context) {
@@ -42,7 +83,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      'Do you want to register',
+                      'Do you want to register?',
                       style: TextStyle(
                         fontSize: 17,
                         color: Colors.grey.shade700,
@@ -58,9 +99,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           },
                           child: const Text('No')),
                       ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             Navigator.of(context).pop();
                             Navigator.of(context).pop();
+                            registerWork();
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => const WorksPage()));
                           },
@@ -88,99 +130,95 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 size: 250,
               ),
             ),
-            Expanded(
-              child: SizedBox(
-                width: double.infinity,
-                // color: Colors.black26,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Align(
-                        alignment: Alignment.topLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 20, top: 10),
-                          child: Text(
-                            '${widget.wage}\$',
-                            style: const TextStyle(fontSize: 50),
-                          ),
-                        )),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 25),
-                      child: Text(
-                        'Event: Golden leaf',
-                        style: TextStyle(fontSize: 18),
-                      ),
+            SizedBox(
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 20, top: 10),
+                        child: Text(
+                          '${widget.wage}\$',
+                          style: const TextStyle(fontSize: 50),
+                        ),
+                      )),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 25),
+                    child: Text(
+                      'Event: Golden leaf',
+                      style: TextStyle(fontSize: 18),
                     ),
-                    Padding(
-                        padding: const EdgeInsets.only(left: 25),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.calendar_month),
-                            Text(
-                              ' ${widget.date}',
-                              style: const TextStyle(fontSize: 18),
-                            ),
-                            const SizedBox(width: 30),
-                            const Icon(Icons.timer),
-                            Text(
-                              ' ${widget.time}',
-                              style: const TextStyle(fontSize: 18),
-                            )
-                          ],
-                        )),
-                    Padding(
+                  ),
+                  Padding(
                       padding: const EdgeInsets.only(left: 25),
                       child: Row(
                         children: [
-                          const Icon(Icons.location_pin),
+                          const Icon(Icons.calendar_month),
                           Text(
-                            ' ${widget.location}',
+                            ' ${widget.date}',
                             style: const TextStyle(fontSize: 18),
                           ),
-                        ],
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 25),
-                      child: Row(
-                        children: [
-                          Icon(Icons.phone),
+                          const SizedBox(width: 30),
+                          const Icon(Icons.timer),
                           Text(
-                            ' 7994051281',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 25),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.people),
-                          Text(
-                            '$count / ${widget.workers}',
+                            ' ${widget.time}',
                             style: const TextStyle(fontSize: 18),
-                          ),
+                          )
                         ],
-                      ),
+                      )),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 25),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.location_pin),
+                        Text(
+                          ' ${widget.location}',
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 25),
+                    child: Row(
+                      children: [
+                        Icon(Icons.phone),
+                        Text(
+                          ' 7994051281',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 25),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.people),
+                        Text(
+                          '$count / ${widget.workers}',
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
         ),
         bottomNavigationBar: BottomAppBar(
-          //color: Colors.purple,
           child: Row(
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: 10),
                 child: Material(
-                  elevation: 100,
+                  elevation: 5,
                   child: Container(
                     width: 159,
-                    height: double.infinity,
+                    height: 50,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.red,
@@ -195,14 +233,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
               ),
               Material(
-                elevation: 100,
+                elevation: 5,
                 child: GestureDetector(
-                  onTap: () {
-                    onRegisterPressed();
-                  },
+                  onTap: onRegisterPressed,
                   child: Container(
                     width: 159,
-                    height: double.infinity,
+                    height: 50,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.green,
