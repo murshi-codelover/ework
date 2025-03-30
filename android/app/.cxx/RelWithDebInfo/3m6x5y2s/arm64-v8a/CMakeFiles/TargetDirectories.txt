@@ -1,0 +1,2 @@
+D:/vscode/newbegin/newproject/android/app/.cxx/RelWithDebInfo/3m6x5y2s/arm64-v8a/CMakeFiles/edit_cache.dir
+D:/vscode/newbegin/newproject/android/app/.cxx/RelWithDebInfo/3m6x5y2s/arm64-v8a/CMakeFiles/rebuild_cache.dir

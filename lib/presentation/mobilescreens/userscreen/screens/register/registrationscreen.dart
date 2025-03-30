@@ -8,6 +8,7 @@ class RegistrationScreen extends StatefulWidget {
   final String wage;
   final String work;
   final String description;
+  final String workers;
 
   const RegistrationScreen({
     super.key,
@@ -17,7 +18,7 @@ class RegistrationScreen extends StatefulWidget {
     required this.wage,
     required this.work,
     required this.description,
-    required String workers,
+    required this.workers,
   });
 
   @override
@@ -26,7 +27,9 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   String count = ' 0';
-  void onRegisterPressed() {
+
+  void onRegisterPressed() async {
+    // final box = await Hive.openBox<WorkModel>('workBox');
     showDialog(
         context: context,
         builder: (context) {
@@ -155,7 +158,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         children: [
                           const Icon(Icons.people),
                           Text(
-                            count,
+                            '$count / ${widget.workers}',
                             style: const TextStyle(fontSize: 18),
                           ),
                         ],

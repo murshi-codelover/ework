@@ -67,69 +67,49 @@ class HomePage extends StatelessWidget {
                         //               : 'assets/cardcover/catering.jpeg',
                         //         )));'assets/cardcover/juice.jpeg'
                       },
-                      child: Container(
-                        child: const Column(
-                          children: [
-                            SizedBox(
-                                width: double.infinity,
-                                height: 140,
-                                child: CircleAvatar(
-                                  child: Icon(
-                                    Icons.food_bank,
-                                    size: 50,
-                                  ),
-                                )),
-                            Text(
-                              'Golden Leaf',
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            Text(
-                              'Catering work',
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.calendar_month,
-                                  size: 12,
+                      child: const Column(
+                        children: [
+                          SizedBox(
+                              width: double.infinity,
+                              height: 140,
+                              child: CircleAvatar(
+                                child: Icon(
+                                  Icons.food_bank,
+                                  size: 50,
                                 ),
-                                Text(' 21-12-24',
-                                    style: TextStyle(fontSize: 12))
-                              ],
-                            ),
-                            // const Row(
-                            //   mainAxisAlignment: MainAxisAlignment.center,
-                            //   children: [
-                            //     Icon(
-                            //       Icons.location_pin,
-                            //       size: 12,
-                            //     ),
-                            //     Text(
-                            //       ' Thodupuzha',
-                            //       style: TextStyle(fontSize: 12),
-                            //     )
-                            //   ],
-                            // )
-                          ],
-                        ),
-                        // child: Container(
-                        //   decoration: BoxDecoration(
-                        //       color: Colors.blue,
-                        //       borderRadius: BorderRadius.circular(8.0),
-                        //       image: DecorationImage(
-                        //           image: AssetImage(
-                        //             index == 0 ||
-                        //                     index == 3 ||
-                        //                     index == 4 ||
-                        //                     index == 7 ||
-                        //                     index == 8
-                        //                 ? 'assets/cardcover/juice.jpeg'
-                        //                 : 'assets/cardcover/catering.jpeg',
-                        //           ),
-                        //           fit: BoxFit.fill)),
-                        // ),
-                        //    ),
+                              )),
+                          Text(
+                            'Golden Leaf',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          Text(
+                            'Catering work',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.calendar_month,
+                                size: 12,
+                              ),
+                              Text(' 21-12-24', style: TextStyle(fontSize: 12))
+                            ],
+                          ),
+                          // const Row(
+                          //   mainAxisAlignment: MainAxisAlignment.center,
+                          //   children: [
+                          //     Icon(
+                          //       Icons.location_pin,
+                          //       size: 12,
+                          //     ),
+                          //     Text(
+                          //       ' Thodupuzha',
+                          //       style: TextStyle(fontSize: 12),
+                          //     )
+                          //   ],
+                          // )
+                        ],
                       ),
                     ),
                   );

@@ -8,11 +8,11 @@ class ABM extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void onEditTap() {
-      return showAboutDialog(
-        context: context,
-      );
-    }
+    // void onEditTap() {
+    //   return showAboutDialog(
+    //     context: context,
+    //   );
+    // }
 
     TextEditingController nameController = TextEditingController();
     TextEditingController phoneController = TextEditingController();

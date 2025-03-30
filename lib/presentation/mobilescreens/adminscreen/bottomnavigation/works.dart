@@ -1,5 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseFirestore;
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:newproject/constants/widgets/mytextfield.dart';
 
 import '../../../../db/workmodel.dart';
@@ -27,14 +27,40 @@ class _WorksPageState extends State<WorksPage> {
   @override
   void initState() {
     super.initState();
+    loadWorksFromFirestore();
     _loadWorkList();
   }
 
-  void _loadWorkList() {
-    final box = Hive.box<WorkModel>('workBox');
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  Future<void> addWorkToFirestore(WorkModel work) async {
+    await firestore
+        .collection('works')
+        .add(work.toJson()); // Convert model to JSON
+  }
+
+  Future<void> loadWorksFromFirestore() async {
+    final snapshot = await firestore.collection('works').get();
     setState(() {
-      workList = box.values.toList();
+      workList =
+          snapshot.docs.map((doc) => WorkModel.fromJson(doc.data())).toList();
     });
+  }
+
+  void _loadWorkList() async {
+    final snapshot = await firestore.collection('works').get();
+    setState(() {
+      workList =
+          snapshot.docs.map((doc) => WorkModel.fromJson(doc.data())).toList();
+    });
+  }
+
+  Future<void> updateWork(String docId, WorkModel updatedWork) async {
+    await firestore.collection('works').doc(docId).update(updatedWork.toJson());
+  }
+
+  Future<void> deleteWork(String docId) async {
+    await firestore.collection('works').doc(docId).delete();
   }
 
   Future<void> _pickDate(BuildContext context) async {
@@ -78,22 +104,6 @@ class _WorksPageState extends State<WorksPage> {
       );
       return;
     }
-
-    final box = Hive.box<WorkModel>('workBox');
-    final newWork = WorkModel(
-      date: _dateController.text,
-      time: _timeController.text,
-      location: _locationController.text,
-      wage: _wageController.text,
-      work: _workController.text,
-      description: _discController.text,
-      workers: _workersController.text,
-    );
-
-    box.add(newWork); // Add WorkModel instance to Hive
-    setState(() {
-      workList = box.values.toList();
-    });
 
     // Clear the text fields
     _dateController.clear();
@@ -226,23 +236,24 @@ class _WorksPageState extends State<WorksPage> {
           : ListView.builder(
               itemCount: workList.length,
               itemBuilder: (context, index) {
-                final work = workList[index];
+                // final work = workList[index];
                 return Card(
-                  margin: const EdgeInsets.all(8.0),
-                  child: ListTile(
-                    title: Text(work.work ?? 'No Title'),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Date: ${work.date ?? 'N/A'}'),
-                        Text('Time: ${work.time ?? 'N/A'}'),
-                        Text('Location: ${work.location ?? 'N/A'}'),
-                        Text('Wage: ${work.wage ?? 'N/A'}'),
-                        Text('Description: ${work.description ?? 'N/A'}'),
-                      ],
-                    ),
-                  ),
-                );
+                    // margin: const EdgeInsets.all(8.0),
+                    // child: ListTile(
+                    //   title: Text(work.work ?? 'No Title'),
+                    //   subtitle: Column(
+                    //     crossAxisAlignment: CrossAxisAlignment.start,
+                    //     children: [
+                    //       Text('Date: ${work.date ?? 'N/A'}'),
+                    //       Text('Time: ${work.time ?? 'N/A'}'),
+                    //       Text('Location: ${work.location ?? 'N/A'}'),
+                    //       Text('Wage: ${work.wage ?? 'N/A'}'),
+                    //       Text('Description: ${work.description ?? 'N/A'}'),
+                    //       Text('Workers: ${work.workers ?? 'N/A'}'),
+                    //     ],
+                    //   ),
+                    // ),
+                    );
               },
             ),
       floatingActionButton: FloatingActionButton(

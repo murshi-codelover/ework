@@ -1,59 +1,20 @@
-import 'package:hive/hive.dart';
-
-part 'workmodel.g.dart'; // This file is generated automatically.
-
-@HiveType(typeId: 0) // Use a unique typeId for each model.
-class WorkModel extends HiveObject {
-  @HiveField(0)
-  String? date;
-
-  @HiveField(1)
-  String? time;
-
-  @HiveField(2)
-  String? location;
-
-  @HiveField(3)
-  String? wage;
-
-  @HiveField(4)
-  String? work;
-
-  @HiveField(5)
-  String? description;
-
-  @HiveField(6)
-  String? workers;
-
-  @HiveField(7)
-  int registeredWorkers = 0;
+class WorkModel {
+  String? id; // Firestore document ID
+  String date, time, location, wage, work, description, workers;
 
   WorkModel({
-    this.date,
-    this.time,
-    this.location,
-    this.wage,
-    this.work,
-    this.description,
-    this.workers,
-    this.registeredWorkers = 0,
+    this.id,
+    required this.date,
+    required this.time,
+    required this.location,
+    required this.wage,
+    required this.work,
+    required this.description,
+    required this.workers,
   });
 
-  // Factory constructor to create a WorkModel from a Map
-  factory WorkModel.fromMap(Map<dynamic, dynamic> map) {
-    return WorkModel(
-      date: map['date'] as String?,
-      time: map['time'] as String?,
-      location: map['location'] as String?,
-      wage: map['wage'] as String?,
-      work: map['work'] as String?,
-      description: map['description'] as String?,
-      workers: map['workers'] as String?,
-    );
-  }
-
-  // Method to convert a WorkModel into a Map
-  Map<String, dynamic> toMap() {
+  // Convert object to JSON for Firestore
+  Map<String, dynamic> toJson() {
     return {
       'date': date,
       'time': time,
@@ -63,5 +24,18 @@ class WorkModel extends HiveObject {
       'description': description,
       'workers': workers,
     };
+  }
+
+  // Convert Firestore JSON to WorkModel
+  factory WorkModel.fromJson(Map<String, dynamic> json) {
+    return WorkModel(
+      date: json['date'] ?? '',
+      time: json['time'] ?? '',
+      location: json['location'] ?? '',
+      wage: json['wage'] ?? '',
+      work: json['work'] ?? '',
+      description: json['description'] ?? '',
+      workers: json['workers'] ?? '',
+    );
   }
 }
