@@ -1,4 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseFirestore;
+import 'package:cloud_firestore/cloud_firestore.dart'
+    show DocumentReference, FirebaseFirestore;
 import 'package:flutter/material.dart';
 import 'package:newproject/constants/widgets/mytextfield.dart';
 
@@ -21,46 +22,43 @@ class _WorksPageState extends State<WorksPage> {
   final TextEditingController _workersController = TextEditingController();
 
   List<WorkModel> workList = [];
-  DateTime? selectedDate;
-  TimeOfDay? selectedTime;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
   void initState() {
     super.initState();
     loadWorksFromFirestore();
-    _loadWorkList();
   }
-
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<void> addWorkToFirestore(WorkModel work) async {
-    await firestore
-        .collection('works')
-        .add(work.toJson()); // Convert model to JSON
+    try {
+      DocumentReference docRef =
+          await firestore.collection('works').add(work.toJson());
+      WorkModel updatedWork = work.copyWith(id: docRef.id);
+      await docRef.update(updatedWork.toJson()); // Update with the generated ID
+
+      setState(() {
+        workList.add(updatedWork);
+      });
+    } catch (e) {
+      debugPrint('Error adding work: $e');
+    }
   }
 
+  /// Load all works from Firestore
   Future<void> loadWorksFromFirestore() async {
     final snapshot = await firestore.collection('works').get();
     setState(() {
       workList =
-          snapshot.docs.map((doc) => WorkModel.fromJson(doc.data())).toList();
+          snapshot.docs.map((doc) => WorkModel.fromFirestore(doc)).toList();
     });
-  }
-
-  void _loadWorkList() async {
-    final snapshot = await firestore.collection('works').get();
-    setState(() {
-      workList =
-          snapshot.docs.map((doc) => WorkModel.fromJson(doc.data())).toList();
-    });
-  }
-
-  Future<void> updateWork(String docId, WorkModel updatedWork) async {
-    await firestore.collection('works').doc(docId).update(updatedWork.toJson());
   }
 
   Future<void> deleteWork(String docId) async {
     await firestore.collection('works').doc(docId).delete();
+    setState(() {
+      workList.removeWhere((work) => work.id == docId);
+    });
   }
 
   Future<void> _pickDate(BuildContext context) async {
@@ -72,8 +70,7 @@ class _WorksPageState extends State<WorksPage> {
     );
     if (picked != null) {
       setState(() {
-        selectedDate = picked;
-        _dateController.text = picked.toString().split(' ')[0];
+        _dateController.text = "${picked.toLocal()}".split(' ')[0];
       });
     }
   }
@@ -85,13 +82,12 @@ class _WorksPageState extends State<WorksPage> {
     );
     if (picked != null) {
       setState(() {
-        selectedTime = picked;
         _timeController.text = picked.format(context);
       });
     }
   }
 
-  void onSubmit() {
+  void onSubmit() async {
     if (_dateController.text.isEmpty ||
         _timeController.text.isEmpty ||
         _locationController.text.isEmpty ||
@@ -105,124 +101,18 @@ class _WorksPageState extends State<WorksPage> {
       return;
     }
 
-    // Clear the text fields
-    _dateController.clear();
-    _timeController.clear();
-    _locationController.clear();
-    _wageController.clear();
-    _workController.clear();
-    _discController.clear();
-    _workersController.clear();
-
-    Navigator.of(context).pop();
-  }
-
-  void createWork() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                MyTextField(
-                  HintText: 'Select a date',
-                  LabelText: const Text('Date'),
-                  controller: _dateController,
-                  ObscureText: false,
-                  suffixIcon: IconButton(
-                    onPressed: () async {
-                      await _pickDate(context);
-                      if (selectedDate != null) {
-                        _dateController.text =
-                            selectedDate!.toString().split(' ')[0];
-                      }
-                    },
-                    icon: const Icon(Icons.calendar_month_rounded),
-                  ),
-                ),
-                MyTextField(
-                  HintText: 'Time',
-                  LabelText: const Text('Select a time'),
-                  controller: _timeController,
-                  ObscureText: false,
-                  suffixIcon: IconButton(
-                    onPressed: () async {
-                      await _pickTime(context);
-                    },
-                    icon: const Icon(Icons.timer),
-                  ),
-                ),
-                MyTextField(
-                  HintText: 'Location',
-                  LabelText: const Text('Location'),
-                  controller: _locationController,
-                  ObscureText: false,
-                  suffixIcon: IconButton(
-                    onPressed: () async {},
-                    icon: const Icon(Icons.location_pin),
-                  ),
-                ),
-                MyTextField(
-                  HintText: 'workers',
-                  LabelText: const Text('Workers'),
-                  controller: _workersController,
-                  ObscureText: false,
-                  suffixIcon: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.person),
-                  ),
-                ),
-                MyTextField(
-                  HintText: 'Wage',
-                  LabelText: const Text('Wage'),
-                  controller: _wageController,
-                  ObscureText: false,
-                  suffixIcon: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.currency_rupee),
-                  ),
-                ),
-                MyTextField(
-                  HintText: 'Work',
-                  LabelText: const Text('Work'),
-                  controller: _workController,
-                  ObscureText: false,
-                  suffixIcon: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.event),
-                  ),
-                ),
-                MyTextField(
-                  HintText: 'Description',
-                  LabelText: const Text('Description'),
-                  controller: _discController,
-                  ObscureText: false,
-                  suffixIcon: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.notes),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: onSubmit,
-                      child: const Text('Submit'),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+    WorkModel newWork = WorkModel(
+      work: _workController.text,
+      date: _dateController.text,
+      time: _timeController.text,
+      location: _locationController.text,
+      wage: _wageController.text,
+      description: _discController.text,
+      workers: _workersController.text,
     );
+
+    await addWorkToFirestore(newWork);
+    Navigator.of(context).pop();
   }
 
   @override
@@ -236,30 +126,113 @@ class _WorksPageState extends State<WorksPage> {
           : ListView.builder(
               itemCount: workList.length,
               itemBuilder: (context, index) {
-                // final work = workList[index];
+                final work = workList[index];
                 return Card(
-                    // margin: const EdgeInsets.all(8.0),
-                    // child: ListTile(
-                    //   title: Text(work.work ?? 'No Title'),
-                    //   subtitle: Column(
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children: [
-                    //       Text('Date: ${work.date ?? 'N/A'}'),
-                    //       Text('Time: ${work.time ?? 'N/A'}'),
-                    //       Text('Location: ${work.location ?? 'N/A'}'),
-                    //       Text('Wage: ${work.wage ?? 'N/A'}'),
-                    //       Text('Description: ${work.description ?? 'N/A'}'),
-                    //       Text('Workers: ${work.workers ?? 'N/A'}'),
-                    //     ],
-                    //   ),
-                    // ),
-                    );
+                  margin: const EdgeInsets.all(8.0),
+                  child: ListTile(
+                    title: Text(work.work),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Date: ${work.date}'),
+                        Text('Time: ${work.time}'),
+                        Text('Location: ${work.location}'),
+                        Text('Wage: ${work.wage}'),
+                        Text('Description: ${work.description}'),
+                        Text('Workers: ${work.workers}'),
+                      ],
+                    ),
+                    trailing: IconButton(
+                      icon: Icon(Icons.delete, color: Colors.red),
+                      onPressed: () => deleteWork(work.id!),
+                    ),
+                  ),
+                );
               },
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: createWork,
         child: const Icon(Icons.add),
       ),
+    );
+  }
+
+  void createWork() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                MyTextField(
+                    HintText: 'Select a date',
+                    LabelText: const Text('Date'),
+                    controller: _dateController,
+                    ObscureText: false,
+                    suffixIcon: IconButton(
+                        onPressed: () async => await _pickDate(context),
+                        icon: const Icon(Icons.calendar_month_rounded))),
+                MyTextField(
+                    HintText: 'Time',
+                    LabelText: const Text('Select a time'),
+                    controller: _timeController,
+                    ObscureText: false,
+                    suffixIcon: IconButton(
+                        onPressed: () async => await _pickTime(context),
+                        icon: const Icon(Icons.timer))),
+                MyTextField(
+                    HintText: 'Location',
+                    LabelText: const Text('Location'),
+                    controller: _locationController,
+                    ObscureText: false,
+                    suffixIcon: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.location_pin))),
+                MyTextField(
+                    HintText: 'Workers',
+                    LabelText: const Text('Workers'),
+                    controller: _workersController,
+                    ObscureText: false,
+                    suffixIcon: IconButton(
+                        onPressed: () {}, icon: const Icon(Icons.person))),
+                MyTextField(
+                    HintText: 'Wage',
+                    LabelText: const Text('Wage'),
+                    controller: _wageController,
+                    ObscureText: false,
+                    suffixIcon: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.currency_rupee))),
+                MyTextField(
+                    HintText: 'Work',
+                    LabelText: const Text('Work'),
+                    controller: _workController,
+                    ObscureText: false,
+                    suffixIcon: IconButton(
+                        onPressed: () {}, icon: const Icon(Icons.event))),
+                MyTextField(
+                    HintText: 'Description',
+                    LabelText: const Text('Description'),
+                    controller: _discController,
+                    ObscureText: false,
+                    suffixIcon: IconButton(
+                        onPressed: () {}, icon: const Icon(Icons.notes))),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text('Cancel')),
+                      TextButton(
+                          onPressed: onSubmit, child: const Text('Submit'))
+                    ]),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

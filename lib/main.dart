@@ -1,16 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:newproject/constants/colors/themeprovider.dart';
 import 'package:newproject/presentation/Auth/login.dart';
 import 'package:provider/provider.dart';
 
-void main(dynamic Firebase) async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Hive.initFlutter(); // Initialize Hive for Flutter
-  // // Hive.registerAdapter(
-  // //     WorkModelAdapter()); // Register the adapter for WorkModel
-  // await Hive.openBox<WorkModel>('workBox'); // Open the box
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(); // Initialize Firebase
 
   runApp(ChangeNotifierProvider(
     create: (context) => ThemeProvider(),

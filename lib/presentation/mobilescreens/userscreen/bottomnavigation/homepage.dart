@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                if (!snapshot.hasData || snapshot.data?.docs.isEmpty == true) {
                   return const Center(child: Text('No Work Items Found'));
                 }
 
@@ -58,119 +58,78 @@ class _HomePageState extends State<HomePage> {
                 // 🔍 Filter by search query
                 if (searchQuery.isNotEmpty) {
                   items = items
-                      .where((item) =>
-                          item.work!.toLowerCase().contains(searchQuery))
+                      .where((item) => item.work
+                          .toLowerCase()
+                          .contains(searchQuery.toLowerCase()))
                       .toList();
                 }
 
-                return CustomScrollView(
-                  slivers: [
-                    SliverToBoxAdapter(
-                      child: Container(
-                        margin: const EdgeInsets.all(8.0),
-                        height: 150,
-                        decoration: BoxDecoration(
-                          color: Colors.black45,
-                          borderRadius: BorderRadius.circular(8.0),
+                return GridView.builder(
+                  padding: const EdgeInsets.all(8.0),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 8.0,
+                    mainAxisSpacing: 8.0,
+                    childAspectRatio: 3 / 4,
+                  ),
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    final workItem = items[index];
+                    return GestureDetector(
+                      onTap: () {
+                        // Navigate to another screen (implement as needed)
+                      },
+                      child: Card(
+                        elevation: 10,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        child: const Center(
-                          child: Text('REGISTERED WORK'),
-                        ),
-                      ),
-                    ),
-
-                    // 🔥 Display Work Items
-                    SliverPadding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      sliver: SliverGrid(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 2.0,
-                          mainAxisSpacing: 5.0,
-                          childAspectRatio: 3 / 4,
-                        ),
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            final workItem = items[index];
-                            return GestureDetector(
-                              onTap: () {
-                                // Navigate to another screen (implement as needed)
-                              },
-                              child: Card(
-                                elevation: 10,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                        child: Stack(
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const CircleAvatar(
+                                  radius: 58,
+                                  child: Icon(Icons.work, size: 60),
                                 ),
-                                child: Stack(
+                                const SizedBox(height: 8),
+                                Text(
+                                  workItem.work,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const CircleAvatar(
-                                          radius: 58,
-                                          child:
-                                              Icon(Icons.food_bank, size: 60),
-                                        ),
-                                        const SizedBox(height: 8),
-                                        const Text(
-                                          'Golden caters',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            const Icon(
-                                              Icons.calendar_month,
-                                              size: 18,
-                                            ),
-                                            Text(
-                                              workItem.date ?? 'Not valid',
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            const Icon(
-                                              Icons.people,
-                                              size: 18,
-                                            ),
-                                            // Text(
-                                            //   '${workItem.registeredWorkers}/${workItem.workers}',
-                                            //   textAlign: TextAlign.center,
-                                            // ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    Container(
-                                      width: 30,
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        color: Colors.deepPurple,
-                                      ),
-                                      child: const Icon(Icons.water),
-                                    ),
+                                    const Icon(Icons.calendar_month, size: 18),
+                                    Text(workItem.date ?? 'Not valid'),
                                   ],
                                 ),
+                              ],
+                            ),
+                            Positioned(
+                              top: 8,
+                              right: 8,
+                              child: Container(
+                                width: 30,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Colors.deepPurple,
+                                ),
+                                child: const Icon(Icons.check,
+                                    color: Colors.white),
                               ),
-                            );
-                          },
-                          childCount: items.length,
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                  ],
+                    );
+                  },
                 );
               },
             ),

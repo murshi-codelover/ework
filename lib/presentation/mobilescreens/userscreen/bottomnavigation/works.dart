@@ -9,13 +9,6 @@ class WorksPage extends StatefulWidget {
 }
 
 class _WorksPageState extends State<WorksPage> {
-  // void registerWorker(Box<WorkModel> box, WorkModel workItem) {
-  //   if (workItem.registeredWorkers < ((workItem.workers as num) ?? 0)) {
-  //     workItem.registeredWorkers += 1;
-  //     box.put(workItem.work, workItem); // Save the update in Hive
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     //bool isPast = true;
